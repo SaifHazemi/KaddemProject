@@ -38,4 +38,19 @@ public class EtudiantController  {
     public Etudiant updateEtudiant(@RequestBody Etudiant e) {
         return iEtudiantService.updateEtudiant(e);
     }
+
+    @GetMapping("{depatartement-id}")
+
+    public List<Etudiant> getEtudiantsByDepartement(@PathVariable("depatartement-id") Integer idDepartement) {
+        return iEtudiantService.getEtudiantsByDepartement(idDepartement );
+    }
+    @GetMapping("{contart-id}/{equipe-id}")
+    public Etudiant addAndAssignEtudiantToEquipeAndContract(@RequestBody Etudiant e ,@PathVariable("contart-id") Integer idContart , @PathVariable("equipe-id") Integer idEquipe ) {
+        return iEtudiantService.addAndAssignEtudiantToEquipeAndContract( e,idContart, idEquipe);
+    }
+    @PostMapping("{etudiant-id}/{departement-id}")
+    public void addAndAssignEtudiantToEquipeAndContract(@PathVariable("etudiant-id") Integer idEtudiant , @PathVariable("departement-id") Integer idDepartement ) {
+        iEtudiantService.assignEtudiantToDepartement(idEtudiant ,idDepartement );
+    }
+
 }

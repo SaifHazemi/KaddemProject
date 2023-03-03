@@ -4,10 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.inetum.blm.kaddemproject.Entities.Contrat;
 import tn.inetum.blm.kaddemproject.Entities.Etudiant;
+import tn.inetum.blm.kaddemproject.Entities.Specialite;
 import tn.inetum.blm.kaddemproject.Repository.ContratRepository;
 import tn.inetum.blm.kaddemproject.Repository.EtudiantRepository;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class ContratService implements IContratService{
@@ -52,5 +57,27 @@ public class ContratService implements IContratService{
         etudiant.getContrats().add(ce);
         etudiantRepository.save(etudiant);
         return ce;
+    }
+
+    @Override
+    public Map<Specialite, Float> getMontantContratEntreDeuxDate(Integer idUniv, Date startDate, Date endDate) {
+        List<Contrat> contrats = contratRepository.findByEtudiantDepartementUniversiteIdAndDateFinAndDateDebut((long) idUniv, startDate, endDate);
+        Map<Specialite, Float> montantContratParSpecialite = new HashMap<>();
+        for (Contrat contrat : contrats) {
+            Specialite specialite = contrat.getSpecialite();
+            Float montantContrat = montantContratParSpecialite.get(specialite);
+            if (montantContrat == null) {
+                montantContrat = 0f;
+            }
+            montantContrat += contrat.getMontantContrat();
+            montantContratParSpecialite.put(specialite, montantContrat);
+        }
+        return montantContratParSpecialite;
+    }
+
+    @Override
+    public Integer nbContratsValides(Date startDate, Date endDate) {
+        List<Contrat> contrats = contratRepository.findByArchiveFalseAndDateBetween(startDate, endDate);
+        return contrats.size();
     }
 }

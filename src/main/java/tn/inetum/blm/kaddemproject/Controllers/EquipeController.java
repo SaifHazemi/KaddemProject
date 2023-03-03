@@ -32,4 +32,6 @@ public class EquipeController {
     public Equipe updateEquipe(@RequestBody Equipe e) {
         return iEquipeService.updateEquipe(e);
     }
+
+
 }

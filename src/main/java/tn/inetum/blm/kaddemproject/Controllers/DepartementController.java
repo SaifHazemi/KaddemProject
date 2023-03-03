@@ -33,4 +33,8 @@ public class DepartementController {
     public Departement updateDepartement(@RequestBody Departement de) {
         return iDepartementService.updateDepartement(de);
     }
+    @GetMapping("/{universite-id}")
+    public List<Departement> retrieveDepartementsByUniversite(@PathVariable("universite-id") Integer idUniversite) {
+        return iDepartementService.retrieveDepartementsByUniversite(idUniversite);
+    }
 }

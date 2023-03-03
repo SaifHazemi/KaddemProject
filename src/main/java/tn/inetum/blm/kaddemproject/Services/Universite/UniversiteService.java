@@ -2,6 +2,7 @@ package tn.inetum.blm.kaddemproject.Services.Universite;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import tn.inetum.blm.kaddemproject.Entities.Departement;
 import tn.inetum.blm.kaddemproject.Entities.Universite;
 import tn.inetum.blm.kaddemproject.Repository.DepartementRepository;
@@ -38,11 +39,9 @@ public class UniversiteService  implements IUniversiteService{
     public void assignUniversiteToDepartement(Integer idUniversite, Integer idDepartement) {
         Universite universite = universiteRepository.findById(idUniversite).orElse(null);
         Departement departement = departementRepository.findById(idDepartement).orElse(null);
-
-        if(universite != null && departement!= null){
-            universite.getDepartements().add(departement);
-            universiteRepository.save(universite);
-        }
-
+        Assert.isNull(universite,"The university is null ");
+        Assert.isNull(departement,"The departement is null ");
+        universite.getDepartements().add(departement);
+        universiteRepository.save(universite);
     }
 }
