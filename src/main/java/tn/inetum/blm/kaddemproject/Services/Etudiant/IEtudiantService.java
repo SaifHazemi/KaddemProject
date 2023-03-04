@@ -3,6 +3,7 @@ package tn.inetum.blm.kaddemproject.Services.Etudiant;
 import tn.inetum.blm.kaddemproject.Entities.Etudiant;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IEtudiantService {
     List<Etudiant> retrieveAllEtudiants();
@@ -18,4 +19,6 @@ public interface IEtudiantService {
 
     Etudiant addAndAssignEtudiantToEquipeAndContract(Etudiant e, Integer idContrat, Integer idEquipe);
     List<Etudiant> getEtudiantsByDepartement (Integer idDepartement);
+    Optional<Etudiant> findEtudiantByNomEAndPrenomE(String nom, String prenom);
+
 }

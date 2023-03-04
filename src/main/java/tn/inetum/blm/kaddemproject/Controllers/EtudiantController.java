@@ -8,6 +8,7 @@ import tn.inetum.blm.kaddemproject.Entities.Etudiant;
 import tn.inetum.blm.kaddemproject.Services.Etudiant.IEtudiantService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/etudiant")
@@ -51,6 +52,11 @@ public class EtudiantController  {
     @PostMapping("{etudiant-id}/{departement-id}")
     public void addAndAssignEtudiantToEquipeAndContract(@PathVariable("etudiant-id") Integer idEtudiant , @PathVariable("departement-id") Integer idDepartement ) {
         iEtudiantService.assignEtudiantToDepartement(idEtudiant ,idDepartement );
+    }
+
+    @GetMapping("servicefindEtudiantByNomEAndPrenomE/{etudiantnom}/{etudiantprenom}")
+    public Optional<Etudiant> servicefindEtudiantByNomEAndPrenomE(@PathVariable("etudiantnom") String nom,@PathVariable("etudiantprenom") String prenom) {
+            return iEtudiantService.findEtudiantByNomEAndPrenomE(nom,prenom);
     }
 
 }

@@ -41,17 +41,17 @@ public class ContratController {
         return iContratService.updateContrat(ce);
     }
     @PutMapping("/{nomE}/{prenomE}")
-    public Contrat affectContratToEtudiant(@RequestBody Contrat ce, @PathVariable("nomE") String nom , @PathVariable("prenom") String prenom) {
+    public Contrat affectContratToEtudiant(@RequestBody Contrat ce, @PathVariable("nomE") String nom , @PathVariable("prenomE") String prenom) {
         return iContratService.affectContratToEtudiant(ce ,nom ,prenom);
     }
 
-    @GetMapping("/{universite-id}/{startDate}/{endDate}")
+/*    @GetMapping("/{universite-id}/{startDate}/{endDate}")
     public Map<Specialite, Float> affectContratToEtudiant(@PathVariable("universite-id") Integer universiteId, @PathVariable("startDate") Date startDate , @PathVariable("endDate") Date endDate) {
         return iContratService.getMontantContratEntreDeuxDate(universiteId,startDate ,endDate);
-    }
+    }*/
 
-    @GetMapping("/{startDate}/{endDate}")
+/*    @GetMapping("/{startDate}/{endDate}")
     public Integer affectContratToEtudiant(@PathVariable("startDate") Date startDate , @PathVariable("endDate") Date endDate) {
         return iContratService.nbContratsValides(startDate ,endDate);
-    }
+    }*/
 }

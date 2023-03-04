@@ -2,6 +2,7 @@ package tn.inetum.blm.kaddemproject.Services.Etudiant;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import tn.inetum.blm.kaddemproject.Entities.Contrat;
 import tn.inetum.blm.kaddemproject.Entities.Departement;
@@ -14,6 +15,8 @@ import tn.inetum.blm.kaddemproject.Repository.EtudiantRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class EtudiantService implements IEtudiantService{
@@ -67,20 +70,20 @@ public class EtudiantService implements IEtudiantService{
     }
 
     @Override
+    @Transactional
     public  Etudiant addAndAssignEtudiantToEquipeAndContract(Etudiant e, Integer idContrat, Integer idEquipe) {
         Contrat contrat = contratRepository.findById(idContrat).orElse(null);
         Equipe equipe = equipeRepository.findById(idEquipe).orElse(null);
         Assert.isNull(contrat,"The contart is null ");
         Assert.isNull(equipe,"The equipe is null ");
         Assert.isNull(e,"The etudiant  is null ");
-
+        etudiantRepository.saveAndFlush(e);
         List<Equipe> equipes = new ArrayList<>();
         equipes.add(equipe);
         e.setEquipeList(equipes);
-        etudiantRepository.saveAndFlush(e);
         contrat.setEtudiant(e);
-        e.getContrats().add(contrat);
-        return etudiantRepository.save(e);
+        //contratRepository.save(contrat);
+        return e;
     }
 
     @Override
@@ -88,5 +91,14 @@ public class EtudiantService implements IEtudiantService{
         Departement departement = departementRepository.findById(idDepartement).orElse(null);
         Assert.isNull(departement ,"The departement is null ");
         return departement.getEtudiants();
+    }
+
+    @Override
+    public Optional<Etudiant> findEtudiantByNomEAndPrenomE(String nom, String prenom) {
+        Optional<Etudiant> e = etudiantRepository.findEtudiantByNomEAndPrenomE(nom,prenom);
+        if(e == null)
+        return Optional.empty();
+        else
+            return e;
     }
 }

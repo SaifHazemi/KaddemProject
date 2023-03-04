@@ -2,6 +2,7 @@ package tn.inetum.blm.kaddemproject.Services.Contrat;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import tn.inetum.blm.kaddemproject.Entities.Contrat;
 import tn.inetum.blm.kaddemproject.Entities.Etudiant;
 import tn.inetum.blm.kaddemproject.Entities.Specialite;
@@ -48,18 +49,21 @@ public class ContratService implements IContratService{
 
     @Override
     public Contrat affectContratToEtudiant(Contrat ce, String nomE, String prenomE) {
-        Etudiant etudiant = etudiantRepository.findByNomAndPrenom(nomE,prenomE).orElse(null);
-        if (etudiant == null || etudiant.getContrats().size() >= 5) {
-            return null;
-        }
-        // Assign the contract to the student
+
+        Etudiant etudiant = etudiantRepository.findEtudiantByNomEAndPrenomE(nomE,prenomE).orElse(null);
+        Assert.notNull(etudiant,"Etudiant not fund");
+        Integer nbrContrats  = contratRepository.countContratByArchiveIsFalseAndEtudiant_NomEAndEtudiant_PrenomE(nomE,prenomE);
+        Assert.isTrue(nbrContrats >= 5 , "Nombre de contarts est > = 5  ");
+//        if (etudiant == null || etudiant.getContrats().size() >= 5) {
+//            return null;
+//        }
         ce.setEtudiant(etudiant);
         etudiant.getContrats().add(ce);
         etudiantRepository.save(etudiant);
         return ce;
     }
 
-    @Override
+/*    @Override
     public Map<Specialite, Float> getMontantContratEntreDeuxDate(Integer idUniv, Date startDate, Date endDate) {
         List<Contrat> contrats = contratRepository.findByEtudiantDepartementUniversiteIdAndDateFinAndDateDebut((long) idUniv, startDate, endDate);
         Map<Specialite, Float> montantContratParSpecialite = new HashMap<>();
@@ -73,11 +77,11 @@ public class ContratService implements IContratService{
             montantContratParSpecialite.put(specialite, montantContrat);
         }
         return montantContratParSpecialite;
-    }
+    }*/
 
-    @Override
+/*    @Override
     public Integer nbContratsValides(Date startDate, Date endDate) {
         List<Contrat> contrats = contratRepository.findByArchiveFalseAndDateBetween(startDate, endDate);
         return contrats.size();
-    }
+    }*/
 }

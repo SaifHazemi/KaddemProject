@@ -6,6 +6,10 @@ import tn.inetum.blm.kaddemproject.Entities.Etudiant;
 import java.util.Optional;
 
 public interface EtudiantRepository extends JpaRepository<Etudiant,Integer>{
-    Optional<Etudiant> findByNomAndPrenom(String nom, String prenom);
 
+    Optional<Etudiant> findEtudiantByNomEAndPrenomE(String nom, String prenom);
+
+/*
+    Etudiant findByNomEAndPrenomE(String nom,String prenom);
+*/
 }
