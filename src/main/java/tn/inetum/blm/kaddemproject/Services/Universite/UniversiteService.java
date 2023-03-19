@@ -2,6 +2,7 @@ package tn.inetum.blm.kaddemproject.Services.Universite;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import tn.inetum.blm.kaddemproject.Entities.Departement;
 import tn.inetum.blm.kaddemproject.Entities.Universite;
@@ -36,6 +37,7 @@ public class UniversiteService  implements IUniversiteService{
         return universiteRepository.findById(idUniversite).orElse(null);
     }
     @Override
+    @Transactional
     public void assignUniversiteToDepartement(Integer idUniversite, Integer idDepartement) {
         Universite universite = universiteRepository.findById(idUniversite).orElse(null);
         Departement departement = departementRepository.findById(idDepartement).orElse(null);

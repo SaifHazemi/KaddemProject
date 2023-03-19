@@ -17,7 +17,19 @@ public interface ContratRepository extends JpaRepository<Contrat, Integer> {
 /*
     List<Contrat> findByArchiveFalseAndDateBetween(Date startDate, Date endDate);
 */
-@Query("select count(c) from Contrat c where c.archive = false and c.etudiant.nomE = ?1 and c.etudiant.prenomE = ?2")
-Integer countContratByArchiveIsFalseAndEtudiant_NomEAndEtudiant_PrenomE(String nom,String prenom);
+
+
+
+
+    @Query("""
+            select c from Contrat c
+            where c.archive = false and c.etudiant.departement.idDepart = ?1 and c.dateDebutContrat between ?2 and ?3 and c.dateFinContrat between ?2 and ?3
+            order by c.specialite""")
+    List<Contrat> findByArchiveIsFalseAndEtudiant_Departement_IdDepartAndDateDebutContratBetweenAndAndDateFinContratBetweenOrderBySpecialite(int etudiant_departement_idDepart,Date datedebut,Date datefin);
+
+
+
+    @Query("select count(c) from Contrat c where c.archive = false and c.etudiant.nomE = ?1 and c.etudiant.prenomE = ?2")
+    Integer countContratByArchiveIsFalseAndEtudiant_NomEAndEtudiant_PrenomE(String nom,String prenom);
 
 }
