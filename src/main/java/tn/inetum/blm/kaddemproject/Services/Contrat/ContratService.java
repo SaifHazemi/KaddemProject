@@ -9,6 +9,10 @@ import tn.inetum.blm.kaddemproject.Entities.Specialite;
 import tn.inetum.blm.kaddemproject.Repository.ContratRepository;
 import tn.inetum.blm.kaddemproject.Repository.EtudiantRepository;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -63,25 +67,56 @@ public class ContratService implements IContratService{
         return ce;
     }
 
-/*    @Override
+    @Override
     public Map<Specialite, Float> getMontantContratEntreDeuxDate(Integer idUniv, Date startDate, Date endDate) {
-        List<Contrat> contrats = contratRepository.findByEtudiantDepartementUniversiteIdAndDateFinAndDateDebut((long) idUniv, startDate, endDate);
+        List<Contrat> contrats = contratRepository.findByArchiveIsFalseAndEtudiant_Departement_IdDepartAndDateDebutContratAfterAndAndDateFinContratBeforeOrderBySpecialite( idUniv, startDate, endDate);
         Map<Specialite, Float> montantContratParSpecialite = new HashMap<>();
         for (Contrat contrat : contrats) {
             Specialite specialite = contrat.getSpecialite();
-            Float montantContrat = montantContratParSpecialite.get(specialite);
-            if (montantContrat == null) {
-                montantContrat = 0f;
+            float montantContrat = contrat.getMontantContrat();
+            LocalDate d1 = LocalDate.parse(contrat.getDateFinContrat().toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+            LocalDate d2 = LocalDate.parse(contrat.getDateDebutContrat().toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+            Duration diff = Duration.between(d2.atStartOfDay(), d1.atStartOfDay());
+            long diffDays = diff.toDays();
+            float montantcontratsbyhour = montantContrat/diffDays;
+            LocalDate enddate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate stratdate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            if (montantContrat == 0) {
+                montantContrat = 0;
+            }else if (stratdate.isAfter(contrat.getDateDebutContrat())){
+                if(contrat.getDateFinContrat().isAfter(enddate)){
+                    LocalDate d3 = LocalDate.parse(enddate.toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    LocalDate d4 = LocalDate.parse(contrat.getDateDebutContrat().toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    Duration diff1 = Duration.between(d4.atStartOfDay(), d3.atStartOfDay());
+                    long diffDays1 = diff1.toDays();
+                    montantContrat = montantcontratsbyhour*diffDays1;
+                }
+            }else{
+                if(contrat.getDateFinContrat().isAfter(enddate)){
+                    LocalDate d5 = LocalDate.parse(enddate.toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    LocalDate d6 = LocalDate.parse(stratdate.toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    Duration diff2 = Duration.between(d6.atStartOfDay(), d5.atStartOfDay());
+                    long diffDays2 = diff2.toDays();
+                    montantContrat = montantcontratsbyhour*diffDays2;
+                }else{
+                    LocalDate d7 = LocalDate.parse(contrat.getDateFinContrat().toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    LocalDate d8 = LocalDate.parse(stratdate.toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    Duration diff3 = Duration.between(d8.atStartOfDay(), d7.atStartOfDay());
+                    long diffDays3 = diff3.toDays();
+                    montantContrat = montantcontratsbyhour*diffDays3;
+                }
             }
-            montantContrat += contrat.getMontantContrat();
             montantContratParSpecialite.put(specialite, montantContrat);
         }
         return montantContratParSpecialite;
-    }*/
+    }
 
-/*    @Override
+
+
+    @Override
     public Integer nbContratsValides(Date startDate, Date endDate) {
-        List<Contrat> contrats = contratRepository.findByArchiveFalseAndDateBetween(startDate, endDate);
+        List<Contrat> contrats = contratRepository.findByArchiveIsFalseAndDateDebutContratAfterAndAndDateFinContratBefore(startDate, endDate);
         return contrats.size();
-    }*/
+    }
 }
