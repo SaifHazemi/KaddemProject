@@ -33,5 +33,8 @@ public class EquipeController {
         return iEquipeService.updateEquipe(e);
     }
 
-
+    @PostMapping("/evoluer")
+    public void faireEvoluerEquipes(){
+        iEquipeService.faireEvoluerEquipes();
+    }
 }

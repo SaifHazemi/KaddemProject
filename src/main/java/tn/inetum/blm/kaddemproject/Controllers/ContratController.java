@@ -45,13 +45,10 @@ public class ContratController {
         return iContratService.affectContratToEtudiant(ce ,nom ,prenom);
     }
 
-/*    @GetMapping("/{universite-id}/{startDate}/{endDate}")
+   @GetMapping("/{universite-id}/{startDate}/{endDate}")
     public Map<Specialite, Float> affectContratToEtudiant(@PathVariable("universite-id") Integer universiteId, @PathVariable("startDate") Date startDate , @PathVariable("endDate") Date endDate) {
         return iContratService.getMontantContratEntreDeuxDate(universiteId,startDate ,endDate);
-    }*/
+    }
 
-/*    @GetMapping("/{startDate}/{endDate}")
-    public Integer affectContratToEtudiant(@PathVariable("startDate") Date startDate , @PathVariable("endDate") Date endDate) {
-        return iContratService.nbContratsValides(startDate ,endDate);
-    }*/
+
 }

@@ -1,6 +1,7 @@
 package tn.inetum.blm.kaddemproject.Services.Contrat;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import tn.inetum.blm.kaddemproject.Entities.Contrat;
@@ -118,5 +119,19 @@ public class ContratService implements IContratService{
     public Integer nbContratsValides(Date startDate, Date endDate) {
         List<Contrat> contrats = contratRepository.findByArchiveIsFalseAndDateDebutContratAfterAndAndDateFinContratBefore(startDate, endDate);
         return contrats.size();
+    }
+    @Scheduled(cron = "0 0 13 * * ?") // exécution tous les jours à 13h
+    @Override
+    public String retrieveAndUpdateStatusContrat() {
+        contratRepository.findByArchiveIsFalseAndDateFinContrat(LocalDate.now())
+                .stream()
+                .forEach(contrat -> {
+                    contrat.setArchive(true);
+                    System.out.println("Le contrat " + contrat.getIdContrat() + " est archivé.");
+                });
+        contratRepository.findByArchiveIsFalseAndDateFinContratBetween(LocalDate.now() , LocalDate.now().plusDays(15))
+                .stream()
+                .forEach(contrat -> System.out.println("Le contrat " + contrat.getIdContrat() + " est doit expiré dans 15 jours  Le "+ contrat.getDateFinContrat()));
+        return "Les contrats dont la date de fin est aujourd'hui ont été archivés.";
     }
 }

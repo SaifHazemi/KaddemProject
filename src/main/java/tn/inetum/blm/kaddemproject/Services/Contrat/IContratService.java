@@ -25,4 +25,6 @@ public interface IContratService {
 
     Integer nbContratsValides(Date startDate, Date endDate);
 
+    String retrieveAndUpdateStatusContrat();
+
 }

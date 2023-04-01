@@ -20,7 +20,10 @@ public interface ContratRepository extends JpaRepository<Contrat, Integer> {
     List<Contrat> findByArchiveIsFalseAndDateDebutContratAfterAndAndDateFinContratBefore(Date startDate, Date endDate);
 
 
-
+    @Query("select c from Contrat c where c.archive = false and c.dateFinContrat = ?1")
+    List<Contrat> findByArchiveIsFalseAndDateFinContrat(LocalDate nowDate);
+    @Query("select c from Contrat c where c.archive = false and c.dateFinContrat between ?1 and ?2")
+    List<Contrat> findByArchiveIsFalseAndDateFinContratBetween(LocalDate nowDate , LocalDate datePlus15);
 
 
 
